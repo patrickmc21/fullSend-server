@@ -61,7 +61,7 @@ db.post('/fullsend/users', (req, res) => {
 db.post('/fullsend/users/signin', (req, res) => {
   const { email, password } = req.body
   database('users').where({email: email, password: password}).select('id')
-    .then(id => res.status(200).json(id))
+    .then(id => res.status(200).json(id[0]))
     .catch(error => res.status(404).json({error: 'Invalid username and password'}))
 });
 
@@ -71,22 +71,25 @@ db.get('/fullsend/users/', (req, res) => {
     .catch(error => res.status(404).json({error: 'Invalid username and password'}))
 });
 
+db.delete('/fullsend/users/:id', (req, res) => {
+  database('users').where('id', req.params.id).del()
+    .then(id => res.status(200).json({message: 'User has been removed'}))
+    .catch(error => res.status(404).json({error: 'User not found'}))
+})
+
 // database rides
 // ride needs epoch, distance, elapsedTime, date, elevation, userId, trailName, location, difficulty, img, summary
 
 db.get('/fullsend/users/rides/:id', (req, res) => {
   const userId = parseInt(req.params.id)
-  console.log(userId)
   database('rides').where({userId: userId}).select()
     .then(ride => res.status(200).json(ride))
     .catch(error => res.status(404).json({error: 'Invalid user ID'}))
 });
 
 db.post('/fullsend/users/rides', (req, res) => {
-  console.log(req.body);
   const { userId } = req.body;
   const fullRide = {...req.body, userId: parseInt(userId)};
-  console.log(fullRide)
   database('rides').insert(fullRide, 'id')
     .then(ride => {
       res.status(201).json({id: ride[0]})
@@ -95,6 +98,12 @@ db.post('/fullsend/users/rides', (req, res) => {
       res.status(500).json({ error: 'Invalid User ID or ride'})
     });
 });
+
+db.delete('/fullsend/users/rides/:id', (req, res) => {
+  database('rides').where('userId', req.params.id).del()
+    .then(id => res.status(200).json({message: 'Rides have been removed'}))
+    .catch(error => res.status(404).json({error: 'Invalid user ID'}))
+})
 
 
 
