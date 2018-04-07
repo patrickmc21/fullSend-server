@@ -4,7 +4,7 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: 'postgres://localhost/fullSend',
+    connection: 'postgres://localhost/fullsend',
     migrations: {
       directory: './db/migrations'
     },
