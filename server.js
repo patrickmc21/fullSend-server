@@ -61,7 +61,7 @@ db.post('/fullsend/users', (req, res) => {
 db.post('/fullsend/users/signin', (req, res) => {
   const { email, password } = req.body
   database('users').where({email: email, password: password}).select('id')
-    .then(id => res.status(200).json(id[0]))
+    .then(id => res.status(200).json(id))
     .catch(error => res.status(404).json({error: 'Invalid username and password'}))
 });
 
