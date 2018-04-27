@@ -99,6 +99,16 @@ db.post('/fullsend/users/rides', (req, res) => {
     });
 });
 
+db.put('/fullsend/rides/:id', (req, res) => {
+  database('rides').where('id', req.params.id).update({...req.body})
+    .then(ride => {
+      res.status(204).json('Ride Updated')
+    })
+    .catch(error => {
+      res.status(404).json({message: 'Invalid Ride Id'})
+    })
+});
+
 db.delete('/fullsend/users/rides/:id', (req, res) => {
   database('rides').where('userId', req.params.id).del()
     .then(id => res.status(200).json({message: 'Rides have been removed'}))
