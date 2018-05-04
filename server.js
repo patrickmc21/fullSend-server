@@ -12,6 +12,9 @@ db.use(logger('dev'));
 db.use(bodyParser.json());
 db.use(bodyParser.urlencoded({ extended: false }));
 db.use(cors());
+app.set('port', process.env.PORT || 3000);
+app.locals.title = 'fullSend';
+
 
 
 // Strava OAuth token exchange
@@ -88,6 +91,7 @@ db.get('/fullsend/users/rides/:id', (req, res) => {
 });
 
 db.post('/fullsend/users/rides', (req, res) => {
+  console.log(req.body);
   const { userId } = req.body;
   const fullRide = {...req.body, userId: parseInt(userId)};
   database('rides').insert(fullRide, 'id')
@@ -113,10 +117,15 @@ db.delete('/fullsend/users/rides/:id', (req, res) => {
   database('rides').where('userId', req.params.id).del()
     .then(id => res.status(200).json({message: 'Rides have been removed'}))
     .catch(error => res.status(404).json({error: 'Invalid user ID'}))
-})
+});
 
+db.delete('/fullsend/rides/:id', (req, res) => {
+  console.log(req.params.id);
+  database('rides').where('id', req.params.id).del()
+    .then(id => res.status(204).json({message: 'Ride deleted'}))
+    .catch(error => res.status(404).json({error: 'Ride not found'}))
+});
 
-
-db.listen(3000, () => {
-  console.log('Listening on localhost:3000');
+db.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
