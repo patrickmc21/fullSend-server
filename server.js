@@ -17,7 +17,7 @@ db.set('port', process.env.PORT || 3000);
 db.locals.title = 'fullSend';
 
 function cors(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://fullsend.surge.sh/");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 };
