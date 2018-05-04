@@ -12,8 +12,8 @@ db.use(logger('dev'));
 db.use(bodyParser.json());
 db.use(bodyParser.urlencoded({ extended: false }));
 db.use(cors());
-app.set('port', process.env.PORT || 3000);
-app.locals.title = 'fullSend';
+db.set('port', process.env.PORT || 3000);
+db.locals.title = 'fullSend';
 
 
 
@@ -126,6 +126,6 @@ db.delete('/fullsend/rides/:id', (req, res) => {
     .catch(error => res.status(404).json({error: 'Ride not found'}))
 });
 
-db.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+db.listen(db.get('port'), () => {
+  console.log(`${db.locals.title} is running on ${db.get('port')}.`);
 });
