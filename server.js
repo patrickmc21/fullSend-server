@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan')
 const db = express();
 const bodyParser = require('body-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const fetch = require('node-fetch');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -11,19 +11,20 @@ const database = require('knex')(configuration);
 db.use(logger('dev'));
 db.use(bodyParser.json());
 db.use(bodyParser.urlencoded({ extended: false }));
-// db.use(cors());
-db.use(cors);
+db.use(cors());
+// db.use(cors);
 db.set('port', process.env.PORT || 3000);
 db.locals.title = 'fullSend';
 
-function cors(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://fullsend.surge.sh/");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-};
+// function cors(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Vary", "Origin");
+//   next();
+// };
 
 
-// Strava OAuth token exchange
+// Strava OAuth token exchangep
 db.post('/tokenexchange', (req, res) => {
   const {token, clientId, clientSecret } = req.body;
   const url = 'https://www.strava.com/oauth/token';
