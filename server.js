@@ -39,13 +39,17 @@ db.post('/tokenexchange', (req, res) => {
       'Content-Type': 'application/json'
     }
   };
-  if (token && clientId && clientSecret) {
-    fetch(url, option)
-      .then(response => response.text())
-      .then(text => res.status(200).send(JSON.stringify(text)))
-      .catch(error => res.status(404).send(error.message))
-  } else {
-    res.status(500).send('Invalid request, please include a temporary token, clientId, and clientSecret')
+  try {
+    if (token && clientId && clientSecret) {
+      fetch(url, option)
+        .then(response => response.text())
+        .then(text => res.status(200).send(JSON.stringify(text)))
+        .catch(error => res.status(404).send(error.message))
+    } else {
+      res.status(500).send('Invalid request, please include a temporary token, clientId, and clientSecret')
+    }
+  } catch (error) {
+    res.status(500).json(error)
   }
 });
 
